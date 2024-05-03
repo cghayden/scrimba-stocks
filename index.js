@@ -40,13 +40,14 @@ const apiMessage = document.getElementById('api-message')
 async function fetchStockData() {
   document.querySelector('.action-panel').style.display = 'none'
   loadingArea.style.display = 'flex'
-  // in able to use the caching ability of cloudflare AI Gateway, we need to remove the request id from the polygon response that we send to OpenAI.  This is because polygon attaches a unique id to every request even if it is for the same stock ticker.  But if we receive a request for a stock ticker that we have already requested, we can use the cached response from cloudflare AI Gateway.
+
   try {
     const stockData = await Promise.all(
       tickersArr.map(async (ticker) => {
         const url = `https://polygon-api-worker.cghayden.workers.dev/?ticker=${ticker}&startDate=${dates.startDate}&endDate=${dates.endDate}`
 
         const response = await fetch(url)
+        console.log('response', response)
 
         if (!response.ok) {
           const errMsg = await response.text()
